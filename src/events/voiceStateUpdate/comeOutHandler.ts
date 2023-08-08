@@ -33,9 +33,9 @@ async function comeOutHandler(state: VoiceState, guildData: ModerationClass) {
         const channel = state.guild.channels.cache.get(guildData.chatChannel) as TextChannel;
         if (channel) {
             channel.send({
-                content: `${state} (${inlineCode(
-                    state.id,
-                )}) adlı kullanıcı çok fazla sesten gir çık yaptığı için ${bold('30 dakika')} sunucudan uzaklaştırıldı`,
+                content: `${state.member} (${inlineCode(
+                    state.member.id,
+                )}) adlı kullanıcı çok fazla sesten gir çık yaptığı için ${bold('30 dakika')} boyunca zaman aşımı yedi!`,
             });
         }
     } else if (diff > 10000) {

@@ -1,8 +1,8 @@
+import { NameFlags, RoleLogFlags } from '@/enums';
 import { ModerationClass, UserModel } from '@/models';
 import { Client } from '@/structures';
-import { GuildMember, User, TextChannel, EmbedBuilder, inlineCode, codeBlock } from 'discord.js';
+import { EmbedBuilder, GuildMember, TextChannel, User, codeBlock, inlineCode } from 'discord.js';
 import { sendStaffText } from './anotherTagHandler';
-import { NameFlags, RoleLogFlags } from '@/enums';
 
 async function tagHandler(
     client: Client,
@@ -69,6 +69,8 @@ async function tagHandler(
                 if ((guildData.manRoles || []).includes(lastData.role)) roles.push(...guildData.manRoles);
                 if (member.guild.roles.cache.has(guildData.registeredRole)) roles.push(guildData.registeredRole);
                 member.roles.add(roles);
+            
+
 
                 document.names.push({
                     admin: client.user.id,

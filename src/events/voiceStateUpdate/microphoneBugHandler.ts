@@ -30,7 +30,7 @@ async function microphoneBugHandler(state: VoiceState, guildData: ModerationClas
         const channel = state.guild.channels.cache.get(guildData.chatChannel) as TextChannel;
         if (channel) {
             channel.send({
-                content: `${state} (${inlineCode(state.id)}) adlı kullanıcı mikrofon-kulaklık bugı yaptığı için ${bold(
+                content: `${state.member} (${inlineCode(state.member.id)}) adlı kullanıcı mikrofon-kulaklık bugı yaptığı için ${bold(
                     '30 dakika',
                 )} sunucudan uzaklaştırıldı.`,
             });
