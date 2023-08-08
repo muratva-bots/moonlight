@@ -20,8 +20,9 @@ const UserUpdate: Moonlight.IEvent<Events.UserUpdate> = {
             if (
                 !member ||
                 [
-                    guildData.moderation.underworldRole, guildData.moderation.adsRole, 
-                    guildData.moderation.quarantineRole
+                    guildData.moderation.underworldRole,
+                    guildData.moderation.adsRole,
+                    guildData.moderation.quarantineRole,
                 ].some((role) => member.roles.cache.has(role))
             )
                 return;

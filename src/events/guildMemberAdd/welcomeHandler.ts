@@ -1,7 +1,7 @@
 import { NameFlags } from '@/enums';
 import { ModerationClass, UserModel } from '@/models';
 import { Client } from '@/structures';
-import { EmbedBuilder, GuildMember, TextChannel, bold, inlineCode, time } from 'discord.js';
+import { EmbedBuilder, GuildMember, TextChannel, VoiceChannel, bold, inlineCode, time } from 'discord.js';
 
 async function welcomeHandler(
     client: Client,
@@ -70,26 +70,25 @@ async function welcomeHandler(
 
     if (!registerChannel) return;
 
+    const voiceChannel = member.guild.channels.cache
+        .filter((c) => c.isVoiceBased() && c.parentId === registerChannel.parentId)
+        .sort((a, b) => (a as VoiceChannel).members.size - (b as VoiceChannel).members.size)
+        .first();
+
     registerChannel.send({
-        embeds: [
-            embed.setDescription(
-                [
-                    `Merhabalar ${member}, ${bold(member.guild.name)} sunucumuza hoşgeldin.\n`,
-                    `Seninle beraber sunucumuz ${bold(member.guild.memberCount.toString())} üye sayısına ulaştı.\n`,
-                    `Hesabın **${time(
-                        Math.floor(member.user.createdTimestamp / 1000),
-                        'R',
-                    )}** tarihinde oluşturulmuş. (${bold(
-                        time(Math.floor(member.user.createdTimestamp / 1000), 'D'),
-                    )})\n`,
-                    guildData.tags && guildData.tags.length
-                        ? `Bizi desteklemek için sunucumuzun tagını (${guildData.tags.join(', ')}) alabilirsiniz.`
-                        : undefined,
-                ]
-                    .filter(Boolean)
-                    .join('\n'),
-            ),
-        ],
+        content: [
+            `Merhabalar ${member}, ${bold(member.guild.name)} sunucumuza hoşgeldin.`,
+            `Seninle beraber sunucumuz ${bold(member.guild.memberCount.toString())} üye sayısına ulaştı.`,
+            `Hesabın **${time(Math.floor(member.user.createdTimestamp / 1000), 'R')}** tarihinde oluşturulmuş. (${bold(
+                time(Math.floor(member.user.createdTimestamp / 1000), 'D'),
+            )})`,
+            `Sunucuya erişebilmek için ${voiceChannel} odalarında kayıt olup ismini ve yaşını belirtmen gerekmektedir!`,
+            guildData.tags && guildData.tags.length
+                ? `Bizi desteklemek için sunucumuzun tagını (${guildData.tags.join(', ')}) alabilirsiniz.`
+                : undefined,
+        ]
+            .filter(Boolean)
+            .join('\n'),
     });
 }
 

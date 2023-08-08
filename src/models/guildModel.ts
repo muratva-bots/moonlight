@@ -36,7 +36,7 @@ export class ModerationClass {
     familyRole: string;
     bannedTagRole: string;
     bannedTags: string[];
-    registerChat: string;
+    registerChannel: string;
     invasionProtection: boolean;
     suspectedRole: string;
     autoRegister: boolean;

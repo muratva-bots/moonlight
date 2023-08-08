@@ -11,11 +11,8 @@ async function bannedTagHandler(
     member: GuildMember,
     guildData: ModerationClass,
 ) {
-    if (
-        !guildData.bannedTags ||
-        !guildData.bannedTags.length ||
-        !member.guild.roles.cache.has(guildData.bannedTagRole)
-    ) return false;
+    if (!guildData.bannedTags || !guildData.bannedTags.length || !member.guild.roles.cache.has(guildData.bannedTagRole))
+        return false;
 
     const channel = member.guild.channels.cache.find((c) => c.name === 'banned-tag-log') as TextChannel;
     const now = Date.now();
@@ -40,12 +37,14 @@ async function bannedTagHandler(
                 $push: {
                     roleLogs: {
                         type: RoleLogFlags.BannedTagAdd,
-                        roles: member.roles.cache.filter(r => !r.managed && r.id !== member.guild.id).map(r => r.id),
+                        roles: member.roles.cache
+                            .filter((r) => !r.managed && r.id !== member.guild.id)
+                            .map((r) => r.id),
                         time: now,
-                        admin: client.user.id
-                    }
-                }
-            }
+                        admin: client.user.id,
+                    },
+                },
+            },
         );
 
         if (minStaffRole && member.roles.highest.position >= minStaffRole.position) {

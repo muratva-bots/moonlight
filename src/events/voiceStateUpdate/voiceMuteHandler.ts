@@ -15,7 +15,7 @@ async function voiceMuteHandler(oldState: VoiceState, newState: VoiceState, guil
         }
     }
 
-    if (oldState.serverMute && !newState.serverMute && newState.channel.parentId !== guildData.solvingParent) {
+    if (!newState.serverMute && newState.channel.parentId !== guildData.solvingParent) {
         const penals = await getPendingVoiceMutes(newState.id, newState.guild.id);
         if (penals.some((p) => p.activity)) newState.setMute(true);
     }

@@ -15,7 +15,9 @@ function checkBannedTag(client: Client, member: GuildMember, guildData: Moderati
     if (!channel) return;
 
     const bannedTagsMemberCount = member.guild.members.cache.filter((m) => m.roles.cache.has(guildData.bannedTagRole));
-    const bannedTagMemberCount = member.guild.members.cache.filter((m) => m.displayName.toLowerCase().includes(tag.toLowerCase()));
+    const bannedTagMemberCount = member.guild.members.cache.filter((m) =>
+        m.displayName.toLowerCase().includes(tag.toLowerCase()),
+    );
 
     channel.send({
         embeds: [

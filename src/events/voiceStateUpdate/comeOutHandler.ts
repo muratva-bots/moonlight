@@ -35,7 +35,9 @@ async function comeOutHandler(state: VoiceState, guildData: ModerationClass) {
             channel.send({
                 content: `${state.member} (${inlineCode(
                     state.member.id,
-                )}) adlı kullanıcı çok fazla sesten gir çık yaptığı için ${bold('30 dakika')} boyunca zaman aşımı yedi!`,
+                )}) adlı kullanıcı çok fazla sesten gir çık yaptığı için ${bold(
+                    '30 dakika',
+                )} boyunca zaman aşımı yedi!`,
             });
         }
     } else if (diff > 10000) {

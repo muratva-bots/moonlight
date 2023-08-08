@@ -47,7 +47,9 @@ async function joinLogHandler(state: VoiceState) {
                     codeBlock(
                         'yaml',
                         [
-                            entry && entry.targetId === state.id && entry.executorId !== state.id ? `Taşıyan Yetkili: ${entry.executor.displayName} (${entry.executorId})` : undefined,
+                            entry && entry.targetId === state.id && entry.executorId !== state.id
+                                ? `Taşıyan Yetkili: ${entry.executor.displayName} (${entry.executorId})`
+                                : undefined,
                             `Kanal Adı: ${state.channel.name} (${state.channelId})`,
                             '# Odada Bulunan Kullanıcılar',
                             voiceMembers.length > 0
@@ -55,7 +57,9 @@ async function joinLogHandler(state: VoiceState) {
                                     ? `${voiceMembers.join('\n')}\nve ${voiceMembers.length - 20} kişi daha.`
                                     : voiceMembers.join('\n')
                                 : 'Odada tek başına.',
-                        ].filter(Boolean).join(''),
+                        ]
+                            .filter(Boolean)
+                            .join(''),
                     ),
                 ].join('\n'),
             }),

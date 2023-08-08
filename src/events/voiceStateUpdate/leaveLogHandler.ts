@@ -41,10 +41,12 @@ async function leaveLogHandler(state: VoiceState) {
                             `Kulaklık Durumu: ${state.deaf ? 'Açık!' : 'Kapalı!'}`,
                         ].join(''),
                     ),
-                    entry && entry.targetId === state.id && entry.executorId !== state.id ?
-                        codeBlock("yaml", `Sesten Atan Yetkili: ${entry.executor.displayName} (${entry.executorId})`)
+                    entry && entry.targetId === state.id && entry.executorId !== state.id
+                        ? codeBlock('yaml', `Sesten Atan Yetkili: ${entry.executor.displayName} (${entry.executorId})`)
                         : undefined,
-                ].filter(Boolean).join('\n'),
+                ]
+                    .filter(Boolean)
+                    .join('\n'),
             }),
         ],
     });

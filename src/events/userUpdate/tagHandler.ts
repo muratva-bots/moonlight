@@ -33,26 +33,31 @@ async function tagHandler(
     if (
         !oldHasTag &&
         newHasTag &&
-        ![guildData.bannedTagRole, guildData.suspectedRole].some(r => member.roles.cache.has(r))
+        ![guildData.bannedTagRole, guildData.suspectedRole].some((r) => member.roles.cache.has(r))
     ) {
-        if ([...(guildData.manRoles || []), ...(guildData.womanRoles || []), guildData.registeredRole].some(r => member.roles.cache.has(r))) {
-            if (member.manageable && guildData.secondTag) member.setNickname(member.displayName.replace(guildData.secondTag, guildData.tags[0]));
+        if (
+            [...(guildData.manRoles || []), ...(guildData.womanRoles || []), guildData.registeredRole].some((r) =>
+                member.roles.cache.has(r),
+            )
+        ) {
+            if (member.manageable && guildData.secondTag)
+                member.setNickname(member.displayName.replace(guildData.secondTag, guildData.tags[0]));
             member.roles.add(familyRole);
         } else {
             const document = await UserModel.findOne({ id: member.id, guild: member.guild.id });
             const names = document
                 ? document.names.filter(
-                    (n) =>
-                        n.name &&
-                        n.role &&
-                        ![
-                            NameFlags.Unregister,
-                            NameFlags.BoostFinish,
-                            NameFlags.BoosterChangeName,
-                            NameFlags.ManuelBoostFinish,
-                            NameFlags.UnregisterBoost
-                        ].includes(n.type),
-                )
+                      (n) =>
+                          n.name &&
+                          n.role &&
+                          ![
+                              NameFlags.Unregister,
+                              NameFlags.BoostFinish,
+                              NameFlags.BoosterChangeName,
+                              NameFlags.ManuelBoostFinish,
+                              NameFlags.UnregisterBoost,
+                          ].includes(n.type),
+                  )
                 : [];
             if (
                 names.length &&
@@ -69,8 +74,6 @@ async function tagHandler(
                 if ((guildData.manRoles || []).includes(lastData.role)) roles.push(...guildData.manRoles);
                 if (member.guild.roles.cache.has(guildData.registeredRole)) roles.push(guildData.registeredRole);
                 member.roles.add(roles);
-            
-
 
                 document.names.push({
                     admin: client.user.id,
@@ -100,7 +103,9 @@ async function tagHandler(
     if (
         oldHasTag &&
         !newHasTag &&
-        [...(guildData.womanRoles || []), ...(guildData.manRoles || []), guildData.registeredRole].some((role) => member.roles.cache.has(role))
+        [...(guildData.womanRoles || []), ...(guildData.manRoles || []), guildData.registeredRole].some((role) =>
+            member.roles.cache.has(role),
+        )
     ) {
         const lastRoles = member.roles.cache.filter((c) => !c.managed && c.id !== member.guild.id);
         const minStaffRole = member.guild.roles.cache.get(guildData.minStaffRole);
@@ -122,7 +127,7 @@ async function tagHandler(
                         },
                     },
                     $set: {
-                        lastRoles: lastRoles.filter(r => minStaffRole?.position > r.position).map((c) => c.id),
+                        lastRoles: lastRoles.filter((r) => minStaffRole?.position > r.position).map((c) => c.id),
                     },
                 },
             );

@@ -1,9 +1,9 @@
-import { ANOTHER_TAGS } from "@/assets";
-import { RoleLogFlags } from "@/enums";
-import { ModerationClass, UserModel } from "@/models";
-import { Client } from "@/structures";
-import { Guild, inlineCode } from "discord.js";
-import { sendStaffText } from "../../userUpdate/anotherTagHandler";
+import { ANOTHER_TAGS } from '@/assets';
+import { RoleLogFlags } from '@/enums';
+import { ModerationClass, UserModel } from '@/models';
+import { Client } from '@/structures';
+import { Guild, inlineCode } from 'discord.js';
+import { sendStaffText } from '../../userUpdate/anotherTagHandler';
 
 function anotherTagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
     const minStaffRole = guild.roles.cache.get(guildData.minStaffRole);
