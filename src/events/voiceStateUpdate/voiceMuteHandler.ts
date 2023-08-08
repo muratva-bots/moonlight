@@ -5,7 +5,7 @@ import { VoiceState } from 'discord.js';
 async function voiceMuteHandler(oldState: VoiceState, newState: VoiceState, guildData: ModerationClass) {
     if (newState.serverMute) {
         const penals = await getPendingVoiceMutes(newState.id, newState.guild.id);
-        if (penals.some((p) => !p.activity) && newState.channel.id !== guildData.afkRoom) {
+        if (penals.some((p) => p.activity === false) && newState.channel.id !== guildData.afkRoom) {
             if (newState.serverMute) newState.member.voice.setMute(false);
 
             await PenalModel.updateMany(
@@ -17,7 +17,7 @@ async function voiceMuteHandler(oldState: VoiceState, newState: VoiceState, guil
 
     if (!newState.serverMute && newState.channel.parentId !== guildData.solvingParent) {
         const penals = await getPendingVoiceMutes(newState.id, newState.guild.id);
-        if (penals.some((p) => p.activity)) newState.setMute(true);
+        if (penals.some((p) => p.activity === true)) newState.setMute(true);
     }
 }
 
