@@ -81,7 +81,7 @@ async function welcomeHandler(
                 time(Math.floor(member.user.createdTimestamp / 1000), 'D'),
             )})`,
             `Sunucuya erişebilmek için ${voiceChannel} odalarında kayıt olup ismini ve yaşını belirtmen gerekmektedir!`,
-            guildData.tags && guildData.tags.length
+            guildData.tags?.length
                 ? `Bizi desteklemek için sunucumuzun tagını (${guildData.tags.join(', ')}) alabilirsiniz.`
                 : undefined,
         ]
@@ -93,7 +93,7 @@ async function welcomeHandler(
 export default welcomeHandler;
 
 function giveUnregisterRoles(member: GuildMember, guildData: ModerationClass) {
-    const unregisterRoles = (guildData.unregisterRoles || []).filter((r) => member.guild.roles.cache.has(r));
+    const unregisterRoles = guildData.unregisterRoles?.filter((r) => member.guild.roles.cache.has(r));
     if (unregisterRoles.length) member.roles.add(unregisterRoles);
     else console.log('Guild Member Add: No given role.');
 }

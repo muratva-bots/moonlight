@@ -1,6 +1,14 @@
 import { SpecialCommandFlags } from '@/enums';
 import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
 
+export interface IRank {
+    point: number;
+    role: string;
+    taskCount?: number;
+    roleTime?: number;
+    extraRole?: string;
+}
+
 export interface ISpecialCommand {
     type: SpecialCommandFlags;
     punishType?: number;
@@ -14,7 +22,9 @@ export interface IMonthlyRole {
     time: number;
 }
 
-export class PointClass {}
+export class PointClass {
+    ranks: IRank[];
+}
 
 export class ModerationClass {
     tags: string[];

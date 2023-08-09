@@ -9,7 +9,7 @@ async function punishHandler(
     newMember: GuildMember,
     guildData: ModerationClass,
 ) {
-    const specialCommands = (guildData.specialCommands || []).filter((c) => c.type === SpecialCommandFlags.Punishment);
+    const specialCommands = guildData.specialCommands?.filter((c) => c.type === SpecialCommandFlags.Punishment);
     if (
         oldMember.roles.cache.map((r) => r.id) === newMember.roles.cache.map((r) => r.id) ||
         ![

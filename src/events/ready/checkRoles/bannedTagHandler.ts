@@ -5,8 +5,7 @@ import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from 'discord
 import { sendStaffText } from 'src/events/userUpdate/anotherTagHandler';
 
 function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
-    if (!guildData.bannedTags || !guildData.bannedTags.length || !guild.roles.cache.has(guildData.bannedTagRole))
-        return;
+    if (!guildData.bannedTags?.length || !guild.roles.cache.has(guildData.bannedTagRole)) return;
 
     const now = Date.now();
     const channel = guild.channels.cache.find((c) => c.name === 'banned-tag-log') as TextChannel;

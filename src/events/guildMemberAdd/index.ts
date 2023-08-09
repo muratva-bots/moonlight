@@ -28,7 +28,7 @@ const GuildMemberAdd: Moonlight.IEvent<Events.GuildMemberAdd> = {
             const hasFakeAccounts = await checkFakeAccount(member, guildData.moderation, registerChannel);
             if (hasFakeAccounts) return;
 
-            if (!guildData.moderation.invasionProtection) return
+            if (!guildData.moderation.invasionProtection) return;
 
             const isSuspect = await checkSuspect(client, member, guildData.moderation, registerChannel);
             if (isSuspect) return;

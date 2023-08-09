@@ -4,13 +4,12 @@ import { Colors, GuildMember, TextChannel, EmbedBuilder, inlineCode } from 'disc
 
 const SEVEN_DAYS = 1000 * 60 * 60 * 24 * 7;
 
-function checkSuspect(
-    client: Client,
-    member: GuildMember,
-    guildData: ModerationClass,
-    registerChannel?: TextChannel,
-) {
-    if (Date.now() - member.user.createdTimestamp > SEVEN_DAYS || !member.guild.roles.cache.has(guildData.suspectedRole)) return false;
+function checkSuspect(client: Client, member: GuildMember, guildData: ModerationClass, registerChannel?: TextChannel) {
+    if (
+        Date.now() - member.user.createdTimestamp > SEVEN_DAYS ||
+        !member.guild.roles.cache.has(guildData.suspectedRole)
+    )
+        return false;
 
     client.utils.setRoles(member, guildData.suspectedRole);
     if (registerChannel) {
