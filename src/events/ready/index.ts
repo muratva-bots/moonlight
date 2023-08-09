@@ -37,7 +37,7 @@ const Ready: Moonlight.IEvent<Events.ClientReady> = {
 
         setInterval(() => {
             const now = Date.now();
-            client.warns.filter((v) => now - v.lastWarn > 8000).forEach((_, k) => client.warns.delete(k));
+            client.warns.sweep((v) => now - v.lastWarn > 8000);
         }, 60000);
 
         const guildEventEmitter = GuildModel.watch([{ $match: { 'fullDocument.id': guild.id } }], {
