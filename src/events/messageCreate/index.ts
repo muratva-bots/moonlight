@@ -9,7 +9,7 @@ const MessageCreate: Moonlight.IEvent<Events.MessageCreate> = {
     name: Events.MessageCreate,
     execute: async (client, message) => {
         try {
-            // if (message.author.bot || message.member.permissions.has(PermissionFlagsBits.Administrator)) return;
+            if (message.author.bot || message.member.permissions.has(PermissionFlagsBits.Administrator)) return;
 
             const hasSpam = await spamHandler(message);
             if (hasSpam) return;
