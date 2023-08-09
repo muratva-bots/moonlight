@@ -14,7 +14,7 @@ const VoiceStateUpdate: Moonlight.IEvent<Events.VoiceStateUpdate> = {
 
             if (newState.channelId) {
                 voiceMuteHandler(oldState, newState, guildData.moderation);
-                comeOutHandler(newState, guildData.moderation);
+                if (oldState.channelId !== newState.channelId) comeOutHandler(newState, guildData.moderation);
             }
 
             if (newState.selfMute !== oldState.selfMute || newState.selfDeaf !== oldState.selfDeaf)

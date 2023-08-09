@@ -1,22 +1,22 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Events } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Events } from 'discord.js';
 
 const InteractionCreate: Moonlight.IEvent<Events.InteractionCreate> = {
     name: Events.InteractionCreate,
     execute: (_, interaction) => {
-        if (interaction.isButton() && interaction.customId === "speak-user") {
+        if (interaction.isButton() && interaction.customId === 'speak-user') {
             const buttonRow = new ActionRowBuilder<ButtonBuilder>({
                 components: [
                     new ButtonBuilder({
-                        custom_id: "taked",
+                        custom_id: 'taked',
                         disabled: true,
                         label: interaction.user.displayName,
-                        style: ButtonStyle.Danger
-                    })
-                ]
+                        style: ButtonStyle.Danger,
+                    }),
+                ],
             });
             interaction.message.edit({ components: [buttonRow] });
         }
     },
-}
+};
 
 export default InteractionCreate;

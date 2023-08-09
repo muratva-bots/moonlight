@@ -1,7 +1,4 @@
-import monthlyRoleHandler from "./monthlyRoleHandler"
-import warningHandler from "./warningHandler"
+import monthlyRoleHandler from './monthlyRoleHandler';
+import warningHandler from './warningHandler';
 
-export default [
-    warningHandler,
-    monthlyRoleHandler
-]
+export default [warningHandler, monthlyRoleHandler];

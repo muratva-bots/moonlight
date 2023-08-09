@@ -1,8 +1,8 @@
-import { NameFlags, RoleLogFlags } from "@/enums";
-import { ModerationClass, UserModel } from "@/models";
-import { Client } from "@/structures";
-import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from "discord.js";
-import { sendStaffText } from "src/events/userUpdate/anotherTagHandler";
+import { NameFlags, RoleLogFlags } from '@/enums';
+import { ModerationClass, UserModel } from '@/models';
+import { Client } from '@/structures';
+import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from 'discord.js';
+import { sendStaffText } from 'src/events/userUpdate/anotherTagHandler';
 
 function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
     if (!guildData.tags || !guildData.tags.length || !guild.roles.cache.has(guildData.familyRole)) return;
@@ -10,41 +10,45 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
     const now = Date.now();
     const minStaffRole = guild.roles.cache.get(guildData.minStaffRole);
     const channel = guild.channels.cache.find((c) => c.name === 'tag-log') as TextChannel;
-    const hasUnregisterRoles = guildData.unregisterRoles && guildData.unregisterRoles.some((r) => guild.roles.cache.has(r));
+    const hasUnregisterRoles =
+        guildData.unregisterRoles && guildData.unregisterRoles.some((r) => guild.roles.cache.has(r));
     const tagMemberCount = guild.members.cache.filter((m) =>
         guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
     );
 
     guild.members.cache
-        .filter(m =>
-            ![
-                guildData.adsRole,
-                guildData.bannedTagRole,
-                guildData.underworldRole,
-                guildData.quarantineRole,
-            ].some((role) => m.roles.cache.has(role)) &&
-            guildData.tags.some(t => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
-            !m.roles.cache.has(guildData.familyRole)
+        .filter(
+            (m) =>
+                ![guildData.adsRole, guildData.bannedTagRole, guildData.underworldRole, guildData.quarantineRole].some(
+                    (role) => m.roles.cache.has(role),
+                ) &&
+                guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
+                !m.roles.cache.has(guildData.familyRole),
         )
         .forEach(async (m) => {
-            if ([...(guildData.manRoles || []), ...(guildData.womanRoles || []), guildData.registeredRole].some(r => m.roles.cache.has(r))) {
-                if (m.manageable && guildData.secondTag) m.setNickname(m.displayName.replace(guildData.secondTag, guildData.tags[0]));
+            if (
+                [...(guildData.manRoles || []), ...(guildData.womanRoles || []), guildData.registeredRole].some((r) =>
+                    m.roles.cache.has(r),
+                )
+            ) {
+                if (m.manageable && guildData.secondTag)
+                    m.setNickname(m.displayName.replace(guildData.secondTag, guildData.tags[0]));
                 m.roles.add(guildData.familyRole);
             } else {
                 const document = await UserModel.findOne({ id: m.id, guild: m.guild.id });
                 const names = document
                     ? document.names.filter(
-                        (n) =>
-                            n.name &&
-                            n.role &&
-                            ![
-                                NameFlags.Unregister,
-                                NameFlags.BoostFinish,
-                                NameFlags.BoosterChangeName,
-                                NameFlags.ManuelBoostFinish,
-                                NameFlags.UnregisterBoost
-                            ].includes(n.type),
-                    )
+                          (n) =>
+                              n.name &&
+                              n.role &&
+                              ![
+                                  NameFlags.Unregister,
+                                  NameFlags.BoostFinish,
+                                  NameFlags.BoosterChangeName,
+                                  NameFlags.ManuelBoostFinish,
+                                  NameFlags.UnregisterBoost,
+                              ].includes(n.type),
+                      )
                     : [];
                 if (!names.length) return;
 
@@ -75,17 +79,18 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
                             description: [
                                 `${m} (${inlineCode(m.id)}) kullanıcısı tagımızı alarak aramıza katıldı!`,
                                 codeBlock('fix', `Mevcut isminde tag bulunan üye sayımız: ${tagMemberCount.size}`),
-                            ].join('\n')
-                        })
+                            ].join('\n'),
+                        }),
                     ],
                 });
             }
         });
 
     guild.members.cache
-        .filter(m => 
-            !guildData.tags.some(t => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
-            (m.roles.cache.has(guildData.familyRole) || m.roles.highest.position >= minStaffRole.position)
+        .filter(
+            (m) =>
+                !guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
+                (m.roles.cache.has(guildData.familyRole) || m.roles.highest.position >= minStaffRole.position),
         )
         .forEach(async (m) => {
             if (minStaffRole && m.roles.highest.position >= minStaffRole.position) {
@@ -134,11 +139,11 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
                                 `${m} (${inlineCode(m.id)}) kullanıcısı tagımızı bırakarak aramızdan ayrıldı!`,
                                 codeBlock('fix', `Mevcut isminde tag bulunan üye sayımız: ${tagMemberCount.size}`),
                             ].join('\n'),
-                        })
+                        }),
                     ],
                 });
             }
-        })
+        });
 }
 
 export default tagHandler;

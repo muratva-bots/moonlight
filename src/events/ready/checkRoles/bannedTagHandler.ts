@@ -1,28 +1,25 @@
-import { NameFlags, RoleLogFlags } from "@/enums";
-import { ModerationClass, UserModel } from "@/models";
-import { Client } from "@/structures";
-import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from "discord.js";
-import { sendStaffText } from "src/events/userUpdate/anotherTagHandler";
+import { NameFlags, RoleLogFlags } from '@/enums';
+import { ModerationClass, UserModel } from '@/models';
+import { Client } from '@/structures';
+import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from 'discord.js';
+import { sendStaffText } from 'src/events/userUpdate/anotherTagHandler';
 
 function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
-    if (!guildData.bannedTags || !guildData.bannedTags.length || !guild.roles.cache.has(guildData.bannedTagRole)) return;
+    if (!guildData.bannedTags || !guildData.bannedTags.length || !guild.roles.cache.has(guildData.bannedTagRole))
+        return;
 
     const now = Date.now();
     const channel = guild.channels.cache.find((c) => c.name === 'banned-tag-log') as TextChannel;
     const minStaffRole = guild.roles.cache.get(guildData.minStaffRole);
-    const hasUnregisterRoles = guildData.unregisterRoles && guildData.unregisterRoles.some((r) => guild.roles.cache.has(r));
+    const hasUnregisterRoles =
+        guildData.unregisterRoles && guildData.unregisterRoles.some((r) => guild.roles.cache.has(r));
 
     guild.members.cache
-        .filter(m =>
-            ![
-                guildData.underworldRole,
-                guildData.adsRole,
-                guildData.bannedTagRole,
-                guildData.quarantineRole
-            ].some((role) => m.roles.cache.has(role)) &&
-            guildData.bannedTags.some(t =>
-                m.user.displayName.toLowerCase().includes(t.toLowerCase())
-            )
+        .filter(
+            (m) =>
+                ![guildData.underworldRole, guildData.adsRole, guildData.bannedTagRole, guildData.quarantineRole].some(
+                    (role) => m.roles.cache.has(role),
+                ) && guildData.bannedTags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
         )
         .forEach(async (m) => {
             await UserModel.updateOne(
@@ -31,12 +28,12 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
                     $push: {
                         roleLogs: {
                             type: RoleLogFlags.BannedTagAdd,
-                            roles: m.roles.cache.filter(r => !r.managed && r.id !== m.guild.id).map(r => r.id),
+                            roles: m.roles.cache.filter((r) => !r.managed && r.id !== m.guild.id).map((r) => r.id),
                             time: now,
-                            admin: client.user.id
-                        }
-                    }
-                }
+                            admin: client.user.id,
+                        },
+                    },
+                },
             );
 
             const tag = guildData.bannedTags.find((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase()));
@@ -49,7 +46,9 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
             if (m.manageable) m.setNickname(null);
             if (m.voice.channelId) m.voice.disconnect();
 
-            const bannedTagMemberCount = guild.members.cache.filter((m) => m.displayName.toLowerCase().includes(tag.toLowerCase()));
+            const bannedTagMemberCount = guild.members.cache.filter((m) =>
+                m.displayName.toLowerCase().includes(tag.toLowerCase()),
+            );
             const bannedTagsMemberCount = guild.members.cache.filter((m) => m.roles.cache.has(guildData.bannedTagRole));
 
             if (channel) {
@@ -57,9 +56,7 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
                     embeds: [
                         new EmbedBuilder({
                             description: [
-                                `${m} (${inlineCode(
-                                    m.id,
-                                )}) kişisi sunucumuzda yasaklı olarak bulunan (${inlineCode(
+                                `${m} (${inlineCode(m.id)}) kişisi sunucumuzda yasaklı olarak bulunan (${inlineCode(
                                     tag,
                                 )}) tagı ismine aldığı için yasaklı tag cezası aldı`,
                                 codeBlock(
@@ -71,19 +68,18 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
                                 ),
                             ].join('\n'),
                             color: client.utils.getRandomColor(),
-                            timestamp: now
-                        })
+                            timestamp: now,
+                        }),
                     ],
                 });
             }
         });
 
     guild.members.cache
-        .filter(m =>
-            m.roles.cache.has(guildData.bannedTagRole) &&
-            !(guildData.bannedTags || []).some(t =>
-                m.user.displayName.toLowerCase().includes(t.toLowerCase())
-            )
+        .filter(
+            (m) =>
+                m.roles.cache.has(guildData.bannedTagRole) &&
+                !(guildData.bannedTags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
         )
         .forEach(async (m) => {
             client.utils.setRoles(m, hasUnregisterRoles ? guildData.unregisterRoles : []);
@@ -95,8 +91,10 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
                         new EmbedBuilder({
                             color: client.utils.getRandomColor(),
                             timestamp: now,
-                            description: `${m} (${inlineCode(m.id)})  kişisi sunucumuzda yasaklı olarak bulunan tagı isminden kaldırdığı için yasaklı tagdan çıkarıldı.`
-                        })
+                            description: `${m} (${inlineCode(
+                                m.id,
+                            )})  kişisi sunucumuzda yasaklı olarak bulunan tagı isminden kaldırdığı için yasaklı tagdan çıkarıldı.`,
+                        }),
                     ],
                 });
             }
