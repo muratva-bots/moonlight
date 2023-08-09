@@ -15,6 +15,7 @@ async function welcomeHandler(
 
     if (guildData.autoRegister) {
         const document = await UserModel.findOne({ id: member.id, guild: member.guild.id });
+        const hasTag = (guildData.tags || []).some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()));
         const names = document
             ? document.names.filter(
                   (n) =>
@@ -29,13 +30,9 @@ async function welcomeHandler(
                       ].includes(n.type),
               )
             : [];
-        if (
-            names.length &&
-            ((guildData.taggedMode &&
-                guildData.tags &&
-                guildData.tags.some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) ||
-                document.lastRoles.includes(guildData.vipRole))
-        ) {
+        console.log(names)
+        if (names.length && (guildData.taggedMode && hasTag)) {
+            console.log(names)
             const lastData = names[names.length - 1];
             member.setNickname(lastData.name);
 
@@ -43,6 +40,7 @@ async function welcomeHandler(
             if ((guildData.womanRoles || []).includes(lastData.role)) roles.push(...guildData.womanRoles);
             if ((guildData.manRoles || []).includes(lastData.role)) roles.push(...guildData.manRoles);
             if (member.guild.roles.cache.has(guildData.registeredRole)) roles.push(guildData.registeredRole);
+            if (hasTag && member.guild.roles.cache.has(guildData.familyRole)) roles.push(guildData.familyRole); 
             member.roles.add(roles);
 
             document.names.push({

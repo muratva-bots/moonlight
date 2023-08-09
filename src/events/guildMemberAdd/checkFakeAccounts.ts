@@ -1,5 +1,5 @@
 import { GuildModel, ModerationClass } from '@/models';
-import { GuildMember, TextChannel } from 'discord.js';
+import { GuildMember, PermissionFlagsBits, TextChannel } from 'discord.js';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 const SUSPECT_TIME = 1000 * 60 * 60 * 24 * 7;

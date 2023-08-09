@@ -13,7 +13,7 @@ setInterval(() => {
     comeOuts.filter((v) => 10000 > now - v.lastEnter).forEach((_, k) => comeOuts.delete(k));
 }, 60000);
 
-async function comeOutHandler(state: VoiceState, guildData: ModerationClass) {
+async function comeOutHandler(state: VoiceState, guildData: ModerationClass) {  
     const now = Date.now();
     const comeOut = comeOuts.get(state.id);
     if (!comeOut) {
