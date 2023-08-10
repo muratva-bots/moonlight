@@ -22,10 +22,7 @@ const Ready: Moonlight.IEvent<Events.ClientReady> = {
 
         await client.application.fetch();
         const document = (await GuildModel.findOne({ id: guild.id })) || (await GuildModel.create({ id: guild.id }));
-        client.servers.set(guild.id, {
-            moderation: { ...document.moderation },
-            point: { ...document.point },
-        });
+        client.servers.set(guild.id, { ...document.moderation });
 
         for (const cron of crons) cron({ client, guild });
 
@@ -44,13 +41,8 @@ const Ready: Moonlight.IEvent<Events.ClientReady> = {
             fullDocument: 'updateLookup',
         });
         guildEventEmitter.on('change', ({ fullDocument }: { fullDocument: GuildClass }) =>
-            client.servers.set(guild.id, {
-                moderation: { ...fullDocument.moderation },
-                point: { ...fullDocument.point },
-            }),
+            client.servers.set(guild.id, { ...fullDocument.moderation }),
         );
-
-        // eğer check penalsta kullanıcının cezası biterse ve yasaklı tagı varsa yasaklı taga at
     },
 };
 
