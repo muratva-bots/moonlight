@@ -5,7 +5,7 @@ import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from 'discord
 import { sendStaffText } from 'src/events/userUpdate/anotherTagHandler';
 
 function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
-    if (!guildData.tags || !guildData.tags.length || !guild.roles.cache.has(guildData.familyRole)) return;
+    if (!guildData.tags?.length || !guild.roles.cache.has(guildData.familyRole)) return;
 
     const now = Date.now();
     const minStaffRole = guild.roles.cache.get(guildData.minStaffRole);

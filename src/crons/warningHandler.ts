@@ -34,7 +34,7 @@ function warningHandler({ client, guild }: { client: Client; guild: Guild }) {
                 mostWarneds.push(`${member} (${inlineCode(member.id)} - ${bold(`${staff} uyarı`)})`);
         }
 
-        staffs.filter((_, k) => !members.has(k)).forEach((_, k) => staffs.delete(k));
+        staffs.sweep((_, k) => !members.has(k));
 
         const splitStaffs = client.utils.splitMessage(members.map((m) => m.toString()).join(','));
         for (const splitStaff of splitStaffs) staffChat.send({ content: splitStaff });

@@ -11,7 +11,7 @@ async function tagHandler(
     member: GuildMember,
     guildData: ModerationClass,
 ) {
-    if (!guildData.tags || !guildData.tags.length) return;
+    if (!!guildData.tags?.length) return;
 
     const familyRole = member.guild.roles.cache.get(guildData.familyRole);
     const oldHasTag = guildData.tags.some((t) =>

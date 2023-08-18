@@ -4,7 +4,7 @@ import { Client } from '@/structures';
 import { Guild, PermissionFlagsBits } from 'discord.js';
 
 async function checkNames(client: Client, guild: Guild, guildData: ModerationClass) {
-    if (!guildData.tags || !guildData.tags.length || !guildData.secondTag || !guildData.needAge) return;
+    if (!guildData.tags?.length || !guildData.secondTag || !guildData.needAge) return;
 
     const hasUnregisterRoles =
         guildData.unregisterRoles && guildData.unregisterRoles.some((r) => guild.roles.cache.has(r));

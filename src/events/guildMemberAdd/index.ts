@@ -28,12 +28,12 @@ const GuildMemberAdd: Moonlight.IEvent<Events.GuildMemberAdd> = {
             const hasFakeAccounts = await checkFakeAccount(member, guildData.moderation, registerChannel);
             if (hasFakeAccounts) return;
 
-            if (guildData.moderation.invasionProtection) {
-                const isSuspect = await checkSuspect(client, member, guildData.moderation, registerChannel);
-                if (isSuspect) return;
+            if (!guildData.moderation.invasionProtection) return;
 
-                welcomeHandler(client, member, guildData.moderation, registerChannel);
-            }
+            const isSuspect = await checkSuspect(client, member, guildData.moderation, registerChannel);
+            if (isSuspect) return;
+
+            welcomeHandler(client, member, guildData.moderation, registerChannel);
         } catch (err) {
             console.log('Guild Member Add:', err);
         }

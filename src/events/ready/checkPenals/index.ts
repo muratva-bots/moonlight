@@ -48,10 +48,9 @@ export async function checkPenals(client: Client, guild: Guild) {
 }
 
 export function checkBannedTag(client: Client, member: GuildMember, guildData: ModerationClass) {
-    if (!guildData.bannedTags || !guildData.bannedTags.length || !member.guild.roles.cache.has(guildData.bannedTagRole))
-        return false;
+    if (!member.guild.roles.cache.has(guildData.bannedTagRole)) return false;
 
-    if (guildData.bannedTags.some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) {
+    if (guildData.bannedTags?.some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) {
         if (member.roles.cache.has(guildData.bannedTagRole)) client.utils.setRoles(member, guildData.bannedTagRole);
         return true;
     }

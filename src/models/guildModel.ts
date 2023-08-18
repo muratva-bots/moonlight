@@ -1,6 +1,7 @@
 import { SpecialCommandFlags } from '@/enums';
 import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
 
+
 export interface ISpecialCommand {
     type: SpecialCommandFlags;
     punishType?: number;
@@ -13,8 +14,6 @@ export interface IMonthlyRole {
     role: string;
     time: number;
 }
-
-export class PointClass {}
 
 export class ModerationClass {
     tags: string[];
@@ -73,8 +72,17 @@ export class GuildClass {
     @prop({ type: Object, default: {} })
     public guard: object;
 
-    @prop({ type: Object, default: {} })
-    public point: PointClass;
+    @prop({
+        type: Object,
+        default: {
+            messagePoint: 1,
+            messageStaffPoint: 2,
+            invitePoint: 70,
+            sleepPoint: 4,
+            publicPoint: 8
+        }
+    })
+    public point: object;
 }
 
 export const GuildModel = getModelForClass(GuildClass);

@@ -3,10 +3,10 @@ import { connect } from 'mongoose';
 
 import { Utils } from './Utils';
 import config from '../../config.json';
-import { ModerationClass, PointClass } from '@/models';
+import { ModerationClass } from '@/models';
 
 export class Client extends Core {
-    servers = new Collection<string, { moderation: ModerationClass; point: PointClass }>();
+    servers = new Collection<string, ModerationClass>();
     warns = new Collection<string, Moonlight.IWarn>();
     utils = new Utils(this);
     config = config;
