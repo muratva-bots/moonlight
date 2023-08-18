@@ -39,7 +39,7 @@ async function leaveLogHandler(state: VoiceState) {
                             `Kullanıcı Adı: ${state.member.user.displayName} (${state.id})`,
                             `Mikrofon Durumu: ${state.mute ? 'Açık!' : 'Kapalı!'}`,
                             `Kulaklık Durumu: ${state.deaf ? 'Açık!' : 'Kapalı!'}`,
-                        ].join(''),
+                        ].join('\n'),
                     ),
                     entry && entry.targetId === state.id && entry.executorId !== state.id
                         ? codeBlock('yaml', `Sesten Atan Yetkili: ${entry.executor.displayName} (${entry.executorId})`)

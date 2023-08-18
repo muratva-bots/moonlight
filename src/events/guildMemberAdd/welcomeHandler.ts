@@ -77,24 +77,25 @@ async function welcomeHandler(
 
     registerChannel.send({
         content: [
-            `Merhabalar ${member}, ${bold(member.guild.name)} sunucumuza hoşgeldin.`,
-            `Seninle beraber sunucumuz ${bold(member.guild.memberCount.toString())} üye sayısına ulaştı.`,
-            `Hesabın **${time(Math.floor(member.user.createdTimestamp / 1000), 'R')}** tarihinde oluşturulmuş. (${bold(
-                time(Math.floor(member.user.createdTimestamp / 1000), 'D'),
-            )})`,
-            `Sunucuya erişebilmek için ${voiceChannel} odalarında kayıt olup ismini ve yaşını belirtmen gerekmektedir!`,
+            `Merhabalar ${member}, ${bold(member.guild.name)} sunucumuza hoşgeldin. Seninle beraber sunucumuz ${bold(member.guild.memberCount.toString())} üye sayısına ulaştı. 🎉`,
+            `Sunucuya erişebilmek için ${voiceChannel} odalarında kayıt olup ismini ve yaşını belirtmen gerekmektedir! kurallar kanalından sunucu kurallarımızı okumayı ihmal etme!`,
             guildData.tags && guildData.tags.length
                 ? `Bizi desteklemek için sunucumuzun tagını (${guildData.tags.join(', ')}) alabilirsiniz.`
                 : undefined,
+            `Hesabın **${time(Math.floor(member.user.createdTimestamp / 1000), 'R')}** tarihinde oluşturulmuş. (${bold(
+                time(Math.floor(member.user.createdTimestamp / 1000), 'D'),
+            )})`,
         ]
             .filter(Boolean)
-            .join('\n'),
+            .join('\n\n'),
     });
 }
 
 export default welcomeHandler;
 
 function giveUnregisterRoles(member: GuildMember, guildData: ModerationClass) {
+    if (guildData.changeName) member.setNickname("İsim | Yaş");
+
     const unregisterRoles = (guildData.unregisterRoles || []).filter((r) => member.guild.roles.cache.has(r));
     if (unregisterRoles.length) member.roles.add(unregisterRoles);
     else console.log('Guild Member Add: No given role.');

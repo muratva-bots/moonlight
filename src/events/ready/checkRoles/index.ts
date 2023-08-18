@@ -21,7 +21,7 @@ async function checkRoles(client: Client, guild: Guild) {
     }
 
     anotherTagHandler(client, guild, guildData.moderation);
-    checkNames(client, guild, guildData.moderation);
+    //checkNames(client, guild, guildData.moderation);
     bannedTagHandler(client, guild, guildData.moderation);
     tagHandler(client, guild, guildData.moderation);
 }

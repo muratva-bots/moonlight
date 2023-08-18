@@ -25,8 +25,7 @@ export async function anotherTagHandler(client: Client, user: User, member: Guil
     const tag = filteredTags.find((t) => user.displayName.toLowerCase().includes(t.toLowerCase()));
     if (!tag) return;
 
-    const roles = member.roles.cache.filter((r) => !r.managed && minStaffRole.position > r.position);
-    member.roles.set(roles);
+    const roles = member.roles.cache.filter((r) => minStaffRole.position > r.position && !r.managed);
 
     await UserModel.updateOne(
         { id: member.id, guild: member.guild.id },
@@ -43,7 +42,9 @@ export async function anotherTagHandler(client: Client, user: User, member: Guil
         { upsert: true },
     );
 
-    sendStaffText(client, member, `başka sunucunun tagını (${inlineCode(tag)}) ismine aldı`, roles);
+    sendStaffText(client, member, `başka sunucunun tagını (${inlineCode(tag)}) ismine aldı`, member.roles.cache.filter((r) => minStaffRole.position < r.position && !r.managed));
+    await member.roles.set(roles);
+
 }
 
 export async function sendStaffText(

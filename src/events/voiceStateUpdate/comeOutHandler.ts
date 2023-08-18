@@ -24,7 +24,7 @@ async function comeOutHandler(state: VoiceState, guildData: ModerationClass) {
     comeOut.count = comeOut.count + 1;
 
     const diff = now - comeOut.lastEnter;
-    if (10000 > diff && comeOut.count >= 3) {
+    if (5000 > diff && comeOut.count >= 3) {
         state.member.timeout(
             1000 * 60 * 30,
             'Çok fazla ses odalarında gir çık girişiminde bulunduğun için ceza yedin.',

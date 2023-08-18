@@ -19,11 +19,11 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
     guild.members.cache
         .filter(
             (m) =>
-                ![guildData.adsRole, guildData.bannedTagRole, guildData.underworldRole, guildData.quarantineRole].some(
+            ![guildData.bannedTagRole, guildData.suspectedRole, guildData.underworldRole, guildData.quarantineRole].some(
                     (role) => m.roles.cache.has(role),
                 ) &&
                 guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
-                !m.roles.cache.has(guildData.familyRole),
+                !m.roles.cache.has(guildData.familyRole) && m.manageable,
         )
         .forEach(async (m) => {
             if (
@@ -89,13 +89,14 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
     guild.members.cache
         .filter(
             (m) =>
-                !guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
+                !guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) && m.manageable &&
                 (m.roles.cache.has(guildData.familyRole) || m.roles.highest.position >= minStaffRole.position),
         )
         .forEach(async (m) => {
             if (minStaffRole && m.roles.highest.position >= minStaffRole.position) {
-                const staffRoles = m.roles.cache.filter((r) => r.position >= minStaffRole.position);
-                sendStaffText(client, m, 'tagı isminden çıkardı', staffRoles);
+                const staffRoles = m.roles.cache.filter((r) => minStaffRole.position > r.position && !r.managed);
+                sendStaffText(client, m, 'tagı isminden çıkardı', m.roles.cache.filter((r) => minStaffRole.position < r.position && !r.managed));
+                await m.roles.set(staffRoles);
             }
 
             if (guildData.taggedMode && !m.roles.cache.has(guildData.vipRole) && !m.premiumSince) {

@@ -13,15 +13,14 @@ function anotherTagHandler(client: Client, guild: Guild, guildData: ModerationCl
     guild.members.cache
         .filter(
             (m) =>
-                m.roles.highest.position >= minStaffRole.position &&
+                m.roles.highest.position >= minStaffRole.position && m.manageable &&
                 filteredTags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
         )
         .forEach(async (m) => {
             const tag = filteredTags.find((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase()));
             if (!tag) return;
 
-            const roles = m.roles.cache.filter((r) => !r.managed && minStaffRole.position > r.position);
-            m.roles.set(roles);
+            const roles = m.roles.cache.filter((r) => minStaffRole.position > r.position && !r.managed);
 
             await UserModel.updateOne(
                 { id: m.id, guild: guild.id },
@@ -38,7 +37,8 @@ function anotherTagHandler(client: Client, guild: Guild, guildData: ModerationCl
                 { upsert: true },
             );
 
-            sendStaffText(client, m, `başka sunucunun tagını (${inlineCode(tag)}) ismine aldı`, roles);
+            sendStaffText(client, m, `başka sunucunun tagını (${inlineCode(tag)}) ismine aldı`, m.roles.cache.filter((r) => minStaffRole.position < r.position && !r.managed));
+            await m.roles.set(roles);
         });
 }
 

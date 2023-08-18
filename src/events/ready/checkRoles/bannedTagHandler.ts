@@ -19,7 +19,7 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
             (m) =>
                 ![guildData.underworldRole, guildData.adsRole, guildData.bannedTagRole, guildData.quarantineRole].some(
                     (role) => m.roles.cache.has(role),
-                ) && guildData.bannedTags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
+                ) && guildData.bannedTags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) && m.manageable,
         )
         .forEach(async (m) => {
             await UserModel.updateOne(
@@ -78,7 +78,7 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
     guild.members.cache
         .filter(
             (m) =>
-                m.roles.cache.has(guildData.bannedTagRole) &&
+                m.roles.cache.has(guildData.bannedTagRole) && m.manageable &&
                 !(guildData.bannedTags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
         )
         .forEach(async (m) => {

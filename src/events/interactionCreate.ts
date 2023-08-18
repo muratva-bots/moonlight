@@ -4,6 +4,7 @@ const InteractionCreate: Moonlight.IEvent<Events.InteractionCreate> = {
     name: Events.InteractionCreate,
     execute: (_, interaction) => {
         if (interaction.isButton() && interaction.customId === 'speak-user') {
+            interaction.deferUpdate()
             const buttonRow = new ActionRowBuilder<ButtonBuilder>({
                 components: [
                     new ButtonBuilder({

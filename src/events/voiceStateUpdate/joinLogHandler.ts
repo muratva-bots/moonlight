@@ -26,7 +26,7 @@ async function joinLogHandler(state: VoiceState) {
         { upsert: true },
     );
 
-    const voiceMembers = state.channel.members
+    const voiceMembers = state.channel?.members
         .filter((m) => m.id !== state.id)
         .map((m) => `${m.user.displayName} (${m.id})`);
     channel.send({
@@ -42,7 +42,7 @@ async function joinLogHandler(state: VoiceState) {
                             `Kullanıcı Adı: ${state.member.user.displayName} (${state.id})`,
                             `Mikrofon Durumu: ${state.mute ? 'Açık!' : 'Kapalı!'}`,
                             `Kulaklık Durumu: ${state.deaf ? 'Açık!' : 'Kapalı!'}`,
-                        ].join(''),
+                        ].join('\n'),
                     ),
                     codeBlock(
                         'yaml',
@@ -59,7 +59,7 @@ async function joinLogHandler(state: VoiceState) {
                                 : 'Odada tek başına.',
                         ]
                             .filter(Boolean)
-                            .join(''),
+                            .join('\n'),
                     ),
                 ].join('\n'),
             }),

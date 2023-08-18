@@ -17,11 +17,15 @@ const VoiceStateUpdate: Moonlight.IEvent<Events.VoiceStateUpdate> = {
                 if (oldState.channelId !== newState.channelId) comeOutHandler(newState, guildData.moderation);
             }
 
-            if (newState.selfMute !== oldState.selfMute || newState.selfDeaf !== oldState.selfDeaf)
-                microphoneBugHandler(newState, guildData.moderation);
+            if (
+                newState.selfMute !== oldState.selfMute || 
+                newState.selfDeaf !== oldState.selfDeaf
+            ) microphoneBugHandler(newState, guildData.moderation);
 
-            if ((!oldState.channelId && newState.channelId) || oldState.channelId !== newState.channelId)
-                joinLogHandler(newState);
+            if (
+                (!oldState.channelId && newState.channelId) || 
+                (newState.channelId && oldState.channelId !== newState.channelId)
+            ) joinLogHandler(newState);
 
             if (oldState.channelId && !newState.channelId) leaveLogHandler(oldState);
         } catch (err) {

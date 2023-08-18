@@ -2,14 +2,14 @@ import { ModerationClass } from '@/models';
 import { Client } from '@/structures';
 import { EmbedBuilder, GuildMember, TextChannel, codeBlock, inlineCode } from 'discord.js';
 
-function checkBannedTag(client: Client, member: GuildMember, guildData: ModerationClass) {
+async function checkBannedTag(client: Client, member: GuildMember, guildData: ModerationClass) {
     if (!guildData.bannedTags || !guildData.bannedTags.length || !member.guild.roles.cache.has(guildData.bannedTagRole))
         return false;
 
     const tag = guildData.bannedTags.find((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()));
     if (!tag) return false;
 
-    if (member.guild.roles.cache.has(guildData.bannedTagRole)) client.utils.setRoles(member, guildData.bannedTagRole);
+    if (member.guild.roles.cache.has(guildData.bannedTagRole)) await client.utils.setRoles(member, guildData.bannedTagRole);
 
     const channel = member.guild.channels.cache.find((c) => c.name === 'banned-tag-log') as TextChannel;
     if (!channel) return;
@@ -39,6 +39,8 @@ function checkBannedTag(client: Client, member: GuildMember, guildData: Moderati
             }),
         ],
     });
+    return true;
+
 }
 
 export default checkBannedTag;

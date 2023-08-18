@@ -10,10 +10,10 @@ async function checkNames(client: Client, guild: Guild, guildData: ModerationCla
         guildData.unregisterRoles && guildData.unregisterRoles.some((r) => guild.roles.cache.has(r));
     const willChangeNameMembers = guild.members.cache.filter(
         (m) =>
-            !m.premiumSince &&
+            !m.premiumSince && m.manageable &&
             !m.roles.cache.has(guildData.vipRole) &&
             !m.permissions.has(PermissionFlagsBits.Administrator) &&
-            !m.displayName.includes('|') &&
+            !m.displayName.includes('|') && !m.user.bot &&
             [...(guildData.womanRoles || []), ...(guildData.manRoles || []), guildData.registeredRole].some((r) =>
                 m.roles.cache.has(r),
             ),

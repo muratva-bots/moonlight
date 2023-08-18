@@ -33,7 +33,7 @@ async function tagHandler(
     if (
         !oldHasTag &&
         newHasTag &&
-        ![guildData.bannedTagRole, guildData.suspectedRole].some((r) => member.roles.cache.has(r))
+        ![guildData.bannedTagRole, guildData.suspectedRole, guildData.underworldRole, guildData.quarantineRole].some((r) => member.roles.cache.has(r))
     ) {
         if (
             [...(guildData.manRoles || []), ...(guildData.womanRoles || []), guildData.registeredRole].some((r) =>
@@ -110,8 +110,10 @@ async function tagHandler(
         const lastRoles = member.roles.cache.filter((c) => !c.managed && c.id !== member.guild.id);
         const minStaffRole = member.guild.roles.cache.get(guildData.minStaffRole);
         if (minStaffRole && member.roles.highest.position >= minStaffRole.position) {
-            const staffRoles = member.roles.cache.filter((r) => r.position >= minStaffRole.position);
+            const staffRoles = member.roles.cache.filter((r) => minStaffRole.position > r.position && !r.managed);
             sendStaffText(client, member, 'tagı isminden çıkardı', staffRoles);
+            await member.roles.set(staffRoles);
+
         }
 
         if (guildData.taggedMode && !member.roles.cache.has(guildData.vipRole) && !member.premiumSince) {
