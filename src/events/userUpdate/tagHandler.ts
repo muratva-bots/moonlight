@@ -11,17 +11,17 @@ async function tagHandler(
     member: GuildMember,
     guildData: ModerationClass,
 ) {
-    if (!!guildData.tags?.length) return;
+    if (!guildData.tags || !guildData.tags.length) return;
 
     const familyRole = member.guild.roles.cache.get(guildData.familyRole);
-    const oldHasTag = guildData.tags.some((t) =>
+    const oldHasTag = (guildData.tags || []).some((t) =>
         oldUser.displayName.toLocaleLowerCase().includes(t.toLocaleLowerCase()),
     );
-    const newHasTag = guildData.tags.some((t) =>
+    const newHasTag = (guildData.tags || []).some((t) =>
         newUser.displayName.toLocaleLowerCase().includes(t.toLocaleLowerCase()),
     );
     const tagMemberCount = member.guild.members.cache.filter((m) =>
-        guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
+        (guildData.tags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
     );
     const channel = member.guild.channels.cache.find((c) => c.name === 'tag-log') as TextChannel;
     const now = Date.now();
@@ -62,8 +62,7 @@ async function tagHandler(
             if (
                 names.length &&
                 ((guildData.taggedMode &&
-                    guildData.tags &&
-                    guildData.tags.some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) ||
+                    (guildData.tags || []).some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) ||
                     document.lastRoles.includes(guildData.vipRole))
             ) {
                 const lastData = names[names.length - 1];

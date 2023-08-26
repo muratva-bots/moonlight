@@ -22,11 +22,11 @@ async function bannedTagHandler(
     });
     const tag = guildData.bannedTags.find((t) => newUser.displayName.toLowerCase().includes(t.toLowerCase()));
     const bannedTagMemberCount = member.guild.members.cache.filter((m) =>
-        guildData.bannedTags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
+        (guildData.bannedTags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())),
     );
     const bannedTagsMemberCount = member.guild.members.cache.filter((m) => m.roles.cache.has(guildData.bannedTagRole));
-    const oldHasTag = guildData.bannedTags.some((t) => oldUser.displayName.toLowerCase().includes(t.toLowerCase()));
-    const newHasTag = guildData.bannedTags.some((t) => newUser.displayName.toLowerCase().includes(t.toLowerCase()));
+    const oldHasTag = (guildData.bannedTags || []).some((t) => oldUser.displayName.toLowerCase().includes(t.toLowerCase()));
+    const newHasTag = (guildData.bannedTags || []).some((t) => newUser.displayName.toLowerCase().includes(t.toLowerCase()));
 
     if (!oldHasTag && newHasTag) {
         const minStaffRole = member.guild.roles.cache.get(guildData.minStaffRole);

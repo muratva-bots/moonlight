@@ -12,9 +12,9 @@ const GuildMemberRemove: Moonlight.IEvent<Events.GuildMemberRemove> = {
             if (
                 member.user.bot ||
                 ![
-                    ...(guildData.moderation.womanRoles || []),
-                    ...(guildData.moderation.manRoles || []),
-                    guildData.moderation.registeredRole,
+                    ...(guildData.womanRoles || []),
+                    ...(guildData.manRoles || []),
+                    guildData.registeredRole,
                 ].map((r) => member.roles.cache.has(r)) ||
                 member.displayName !== member.user.displayName
             )

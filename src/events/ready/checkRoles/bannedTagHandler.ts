@@ -5,7 +5,7 @@ import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from 'discord
 import { sendStaffText } from 'src/events/userUpdate/anotherTagHandler';
 
 function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
-    if (!guildData.bannedTags?.length || !guild.roles.cache.has(guildData.bannedTagRole)) return;
+    if (!guildData.bannedTags || !guildData.bannedTags.length || !guild.roles.cache.has(guildData.bannedTagRole)) return;
 
     const now = Date.now();
     const channel = guild.channels.cache.find((c) => c.name === 'banned-tag-log') as TextChannel;
@@ -18,7 +18,7 @@ function bannedTagHandler(client: Client, guild: Guild, guildData: ModerationCla
             (m) =>
                 ![guildData.underworldRole, guildData.adsRole, guildData.bannedTagRole, guildData.quarantineRole].some(
                     (role) => m.roles.cache.has(role),
-                ) && guildData.bannedTags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) && m.manageable,
+                ) && (guildData.bannedTags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) && m.manageable,
         )
         .forEach(async (m) => {
             await UserModel.updateOne(

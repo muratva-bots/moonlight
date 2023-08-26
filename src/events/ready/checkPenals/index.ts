@@ -14,7 +14,7 @@ export async function checkPenals(client: Client, guild: Guild) {
     if (!guildData) return;
 
     const now = Date.now();
-    const specialCommands = (guildData.moderation.specialCommands || []).filter(
+    const specialCommands = (guildData.specialCommands || []).filter(
         (p) => p.type === SpecialCommandFlags.Punishment,
     );
     const query: FilterQuery<PenalClass> = {
@@ -31,13 +31,13 @@ export async function checkPenals(client: Client, guild: Guild) {
         if (!member) return;
 
         if (penal.type === PenalFlags.VoiceMute) {
-            voiceMuteHandler(client, penal, member, guildData.moderation);
+            voiceMuteHandler(client, penal, member, guildData);
             return;
         }
 
-        if (penal.type === PenalFlags.ChatMute) chatMuteHandler(client, member, guildData.moderation);
-        if (penal.type === PenalFlags.Quarantine) quarantineHandler(client, member, guildData.moderation);
-        if (penal.type === PenalFlags.Ban) banHandler(client, member, guildData.moderation);
+        if (penal.type === PenalFlags.ChatMute) chatMuteHandler(client, member, guildData);
+        if (penal.type === PenalFlags.Quarantine) quarantineHandler(client, member, guildData);
+        if (penal.type === PenalFlags.Ban) banHandler(client, member, guildData);
 
         const specialCommand = specialCommands.find((c) => c.punishType === penal.type);
         if (specialCommand) specialCommandHandler(client, member, specialCommand);
@@ -50,7 +50,7 @@ export async function checkPenals(client: Client, guild: Guild) {
 export function checkBannedTag(client: Client, member: GuildMember, guildData: ModerationClass) {
     if (!member.guild.roles.cache.has(guildData.bannedTagRole)) return false;
 
-    if (guildData.bannedTags?.some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) {
+    if ((guildData.bannedTags || []).some((t) => member.user.displayName.toLowerCase().includes(t.toLowerCase()))) {
         if (member.roles.cache.has(guildData.bannedTagRole)) client.utils.setRoles(member, guildData.bannedTagRole);
         return true;
     }

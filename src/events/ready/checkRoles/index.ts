@@ -11,19 +11,19 @@ async function checkRoles(client: Client, guild: Guild) {
     if (!guildData) return;
 
     if (
-        !guildData.moderation.invasionProtection &&
-        guildData.moderation.unregisterRoles &&
-        guildData.moderation.unregisterRoles.some((r) => guild.roles.cache.has(r))
+        !guildData.invasionProtection &&
+        guildData.unregisterRoles &&
+        guildData.unregisterRoles.some((r) => guild.roles.cache.has(r))
     ) {
         guild.members.cache
             .filter((m) => m.roles.cache.size === 1)
-            .forEach((m) => m.roles.add(guildData.moderation.unregisterRoles));
+            .forEach((m) => m.roles.add(guildData.unregisterRoles));
     }
 
-    anotherTagHandler(client, guild, guildData.moderation);
-    //checkNames(client, guild, guildData.moderation);
-    bannedTagHandler(client, guild, guildData.moderation);
-    tagHandler(client, guild, guildData.moderation);
+    anotherTagHandler(client, guild, guildData);
+    checkNames(client, guild, guildData);
+    bannedTagHandler(client, guild, guildData);
+    tagHandler(client, guild, guildData);
 }
 
 export default checkRoles;

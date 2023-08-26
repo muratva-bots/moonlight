@@ -2,7 +2,7 @@ import { PenalFlags } from '@/enums';
 import { ModerationClass, PenalModel } from '@/models';
 import { VoiceState } from 'discord.js';
 
-async function voiceMuteHandler(oldState: VoiceState, newState: VoiceState, guildData: ModerationClass) {
+async function voiceMuteHandler(newState: VoiceState, guildData: ModerationClass) {
     if (newState.serverMute) {
         const penals = await getPendingVoiceMutes(newState.id, newState.guild.id);
         if (penals.some((p) => p.activity === false) && newState.channel.id !== guildData.afkRoom) {

@@ -30,9 +30,7 @@ async function welcomeHandler(
                       ].includes(n.type),
               )
             : [];
-        console.log(names)
-        if (names.length && (guildData.taggedMode && hasTag)) {
-            console.log(names)
+        if (names.length && (!guildData.taggedMode || (guildData.taggedMode && hasTag))) {
             const lastData = names[names.length - 1];
             member.setNickname(lastData.name);
 
@@ -75,19 +73,9 @@ async function welcomeHandler(
 
     registerChannel.send({
         content: [
-<<<<<<< HEAD
             `Merhabalar ${member}, ${bold(member.guild.name)} sunucumuza hoşgeldin. Seninle beraber sunucumuz ${bold(member.guild.memberCount.toString())} üye sayısına ulaştı. 🎉`,
             `Sunucuya erişebilmek için ${voiceChannel} odalarında kayıt olup ismini ve yaşını belirtmen gerekmektedir! kurallar kanalından sunucu kurallarımızı okumayı ihmal etme!`,
-            guildData.tags && guildData.tags.length
-=======
-            `Merhabalar ${member}, ${bold(member.guild.name)} sunucumuza hoşgeldin.`,
-            `Seninle beraber sunucumuz ${bold(member.guild.memberCount.toString())} üye sayısına ulaştı.`,
-            `Hesabın **${time(Math.floor(member.user.createdTimestamp / 1000), 'R')}** tarihinde oluşturulmuş. (${bold(
-                time(Math.floor(member.user.createdTimestamp / 1000), 'D'),
-            )})`,
-            `Sunucuya erişebilmek için ${voiceChannel} odalarında kayıt olup ismini ve yaşını belirtmen gerekmektedir!`,
             guildData.tags?.length
->>>>>>> 02352e5a1d42f763450332eec7c9035925a35766
                 ? `Bizi desteklemek için sunucumuzun tagını (${guildData.tags.join(', ')}) alabilirsiniz.`
                 : undefined,
             `Hesabın **${time(Math.floor(member.user.createdTimestamp / 1000), 'R')}** tarihinde oluşturulmuş. (${bold(
@@ -102,13 +90,9 @@ async function welcomeHandler(
 export default welcomeHandler;
 
 function giveUnregisterRoles(member: GuildMember, guildData: ModerationClass) {
-<<<<<<< HEAD
     if (guildData.changeName) member.setNickname("İsim | Yaş");
 
     const unregisterRoles = (guildData.unregisterRoles || []).filter((r) => member.guild.roles.cache.has(r));
-=======
-    const unregisterRoles = guildData.unregisterRoles?.filter((r) => member.guild.roles.cache.has(r));
->>>>>>> 02352e5a1d42f763450332eec7c9035925a35766
     if (unregisterRoles.length) member.roles.add(unregisterRoles);
     else console.log('Guild Member Add: No given role.');
 }

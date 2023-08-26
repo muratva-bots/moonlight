@@ -16,24 +16,24 @@ const GuildMemberAdd: Moonlight.IEvent<Events.GuildMemberAdd> = {
             if (!guildData) return;
 
             const registerChannel = member.guild.channels.cache.get(
-                guildData.moderation.registerChannel,
+                guildData.registerChannel,
             ) as TextChannel;
 
-            const hasPenal = await checkPenals(client, member, guildData.moderation);
+            const hasPenal = await checkPenals(client, member, guildData);
             if (hasPenal) return;
 
-            const hasBannedTag = await checkBannedTag(client, member, guildData.moderation);
+            const hasBannedTag = await checkBannedTag(client, member, guildData);
             if (hasBannedTag) return;
 
-            const hasFakeAccounts = await checkFakeAccount(member, guildData.moderation, registerChannel);
+            const hasFakeAccounts = await checkFakeAccount(member, guildData, registerChannel);
             if (hasFakeAccounts) return;
 
-            if (!guildData.moderation.invasionProtection) return;
+            if (!guildData.invasionProtection) return;
 
-            const isSuspect = await checkSuspect(client, member, guildData.moderation, registerChannel);
+            const isSuspect = await checkSuspect(client, member, guildData, registerChannel);
             if (isSuspect) return;
 
-            welcomeHandler(client, member, guildData.moderation, registerChannel);
+            welcomeHandler(client, member, guildData, registerChannel);
         } catch (err) {
             console.log('Guild Member Add:', err);
         }

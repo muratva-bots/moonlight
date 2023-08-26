@@ -5,7 +5,7 @@ import { EmbedBuilder, Guild, TextChannel, codeBlock, inlineCode } from 'discord
 import { sendStaffText } from 'src/events/userUpdate/anotherTagHandler';
 
 function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
-    if (!guildData.tags?.length || !guild.roles.cache.has(guildData.familyRole)) return;
+    if (!guildData.tags || !guildData.tags.length || !guild.roles.cache.has(guildData.familyRole)) return;
 
     const now = Date.now();
     const minStaffRole = guild.roles.cache.get(guildData.minStaffRole);
@@ -22,7 +22,7 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
             ![guildData.bannedTagRole, guildData.suspectedRole, guildData.underworldRole, guildData.quarantineRole].some(
                     (role) => m.roles.cache.has(role),
                 ) &&
-                guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
+                (guildData.tags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) &&
                 !m.roles.cache.has(guildData.familyRole) && m.manageable,
         )
         .forEach(async (m) => {
@@ -89,7 +89,7 @@ function tagHandler(client: Client, guild: Guild, guildData: ModerationClass) {
     guild.members.cache
         .filter(
             (m) =>
-                !guildData.tags.some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) && m.manageable &&
+                !(guildData.tags || []).some((t) => m.user.displayName.toLowerCase().includes(t.toLowerCase())) && m.manageable &&
                 (m.roles.cache.has(guildData.familyRole) || m.roles.highest.position >= minStaffRole.position),
         )
         .forEach(async (m) => {

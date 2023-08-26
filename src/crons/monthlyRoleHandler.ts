@@ -6,9 +6,9 @@ import { schedule } from 'node-cron';
 function monthlyRoleHandler({ client, guild }: { client: Client; guild: Guild }) {
     schedule('0 0 0 * * *', async () => {
         const guildData = client.servers.get(guild.id);
-        if (!guildData || !guildData.moderation.monthlyRoles || !guildData.moderation.monthlyRoles.length) return;
+        if (!guildData || !guildData.monthlyRoles || !guildData.monthlyRoles.length) return;
 
-        const monthlyRoles = guildData.moderation.monthlyRoles.filter((m) => guild.roles.cache.has(m.role));
+        const monthlyRoles = guildData.monthlyRoles.filter((m) => guild.roles.cache.has(m.role));
         const allRoles = monthlyRoles.map((m) => m.role);
 
         const userDocuments = await UserModel.find({ guild: guild.id, monthlyRole: true }).select('id');
@@ -25,9 +25,9 @@ function monthlyRoleHandler({ client, guild }: { client: Client; guild: Guild })
                 (m) =>
                     userDocuments.some((d) => d.id === m.id) &&
                     ![
-                        ...(guildData.moderation.manRoles || []),
-                        ...(guildData.moderation.womanRoles || []),
-                        guildData.moderation.registeredRole,
+                        ...(guildData.manRoles || []),
+                        ...(guildData.womanRoles || []),
+                        guildData.registeredRole,
                     ].some((role) => m.roles.cache.some((r) => r.name === role)),
             )
             .forEach(async (m) => {

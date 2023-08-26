@@ -20,7 +20,7 @@ const GuildBanRemove: Moonlight.IEvent<Events.GuildBanRemove> = {
                 return;
             }
 
-            if (!ban.guild.roles.cache.has(guildData.moderation.underworldRole)) return;
+            if (!ban.guild.roles.cache.has(guildData.underworldRole)) return;
 
             const hasBan = await PenalModel.exists({
                 user: ban.user.id,

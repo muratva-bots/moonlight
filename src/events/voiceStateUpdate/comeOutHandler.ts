@@ -1,5 +1,5 @@
 import { ModerationClass } from '@/models';
-import { Collection, TextChannel, VoiceState, bold, inlineCode } from 'discord.js';
+import { Collection, PermissionFlagsBits, TextChannel, VoiceState, bold, inlineCode } from 'discord.js';
 
 interface IComeOut {
     count: number;
@@ -14,6 +14,8 @@ setInterval(() => {
 }, 60000);
 
 async function comeOutHandler(state: VoiceState, guildData: ModerationClass) {
+    if (state.member.permissions.has(PermissionFlagsBits.Administrator)) return;
+
     const now = Date.now();
     const comeOut = comeOuts.get(state.id);
     if (!comeOut) {

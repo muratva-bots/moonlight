@@ -20,18 +20,18 @@ const UserUpdate: Moonlight.IEvent<Events.UserUpdate> = {
             if (
                 !member ||
                 [
-                    guildData.moderation.underworldRole,
-                    guildData.moderation.adsRole,
-                    guildData.moderation.quarantineRole,
+                    guildData.underworldRole,
+                    guildData.adsRole,
+                    guildData.quarantineRole,
                 ].some((role) => member.roles.cache.has(role))
             )
                 return;
 
-            const hasBannedTag = await bannedTagHandler(client, oldUser as User, newUser, member, guildData.moderation);
+            const hasBannedTag = await bannedTagHandler(client, oldUser as User, newUser, member, guildData);
             if (hasBannedTag) return;
 
-            anotherTagHandler(client, newUser, member, guildData.moderation);
-            tagHandler(client, oldUser as User, newUser, member, guildData.moderation);
+            anotherTagHandler(client, newUser, member, guildData);
+            tagHandler(client, oldUser as User, newUser, member, guildData);
         } catch (err) {
             console.log('User Update:', err);
         }

@@ -9,10 +9,10 @@ function warningHandler({ client, guild }: { client: Client; guild: Guild }) {
         const guildData = client.servers.get(guild.id);
         if (!guildData) return;
 
-        const minStaffRole = guild.roles.cache.get(guildData.moderation.minStaffRole);
+        const minStaffRole = guild.roles.cache.get(guildData.minStaffRole);
         if (!minStaffRole) return;
 
-        const staffChat = guild.channels.cache.get(guildData.moderation.staffChat) as TextChannel;
+        const staffChat = guild.channels.cache.get(guildData.staffChat) as TextChannel;
         if (!staffChat) return;
 
         const members = guild.members.cache.filter(

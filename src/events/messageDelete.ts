@@ -6,6 +6,8 @@ const MessageDelete: Moonlight.IEvent<Events.MessageDelete> = {
         try {
             if (message.author.bot || !message.guild || message.embeds.length > 0) return;
 
+            console.log(true)
+
             if (message.partial) message = await message.fetch();
 
             const channel = message.guild.channels.cache.find((c) => c.name === 'message-log') as TextChannel;
